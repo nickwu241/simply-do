@@ -1,0 +1,83 @@
+@font-face {
+  font-family: 'HK Grotesk';
+  src: url('assets/hk-grotesk/HKGrotesk-Medium.otf');
+}
+
+body {
+  text-align: center;
+  font-family: 'HK Grotesk';
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 140px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+input[type='text'] {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #000000;
+  font-size: 16px;
+  font-family: 'HK Grotesk';
+}
+
+.item-input {
+  border-bottom: 0px !important;
+  margin-bottom: 8px;
+}
+
+.green {
+  color: #5cb85c;
+}
+
+.pretty {
+  /* Overwrite pretty checkmark CSS margin-right */
+  margin-right: 0;
+}
+
+.strike {
+  text-decoration: line-through;
+  color: #5cb85c;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.round-btn {
+  border-radius: 100%;
+}
