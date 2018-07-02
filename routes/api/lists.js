@@ -3,6 +3,10 @@ const router = express.Router()
 
 const List = require('../../models/List')
 
+router.get('/:id/exists', (req, res) => {
+  List.findById(req.params.id).then(list => res.json({ exists: list !== null }))
+})
+
 router.get('/:id/items', (req, res) => {
   List.findById(req.params.id)
     .sort({ created_at: -1 })
