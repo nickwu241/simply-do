@@ -7,10 +7,24 @@ import {
 } from './types'
 
 export const setListId = listId => dispatch => {
-  dispatch({
-    type: SET_LIST_ID,
-    payload: listId
-  })
+  fetch(`/api/list/${listId}/exists`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.exists) {
+        dispatch({ type: SET_LIST_ID, payload: listId })
+      } else {
+        fetch(`/api/list/${listId}`, {
+          method: 'POST'
+        })
+          .then(res => res.json())
+          .then(_ => {
+            dispatch({
+              type: SET_LIST_ID,
+              payload: listId
+            })
+          })
+      }
+    })
 }
 
 export const getListItems = listId => dispatch => {
