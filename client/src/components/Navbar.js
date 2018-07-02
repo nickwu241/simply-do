@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import uuid from 'uuid'
 import { setListId } from '../actions/listActions'
 
 class Navbar extends Component {
   constructor(props) {
     super(props)
-    this.props.setListId(props.initialId)
+    this.props.setListId(props.match.params.id)
     this.state = {
-      listIdDisplay: props.initialId,
-      listIdPending: props.initialId
+      listIdDisplay: props.match.params.id,
+      listIdPending: props.match.params.id
     }
   }
 
@@ -18,20 +20,30 @@ class Navbar extends Component {
 
   go = () => {
     const listId = this.state.listIdPending || 'default'
+    if (listId === this.listIdDisplay) {
+      return
+    }
     this.setState({ listIdDisplay: listId })
     this.props.setListId(listId)
+    this.props.history.replace(`/list/${listId}`, 'refresh')
   }
 
-  generateRandomId = () => {
-    console.log('generateRandomId')
-  }
+  generateRandomId = () => this.setState({ listIdPending: uuid() })
 
   copyToClipboard = () => {
-    console.log('copyToClipboard')
+    const copyText = `https://simply-do.herokuapp.com${
+      this.props.history.location.pathname
+    }`
+    navigator.clipboard
+      .writeText(copyText)
+      .then(() => console.log(`copied ${copyText} to clipboard!`))
+      .catch(err => console.error('error copying to clipboard:', err))
+
+    document.getElementById('myTooltip').innerHTML = 'Copied Link to Clipboard!'
   }
 
   showCopiedToClipboard = () => {
-    console.log('showCopiedToClipboard')
+    document.getElementById('myTooltip').innerHTML = 'Copy to Clipboard'
   }
 
   render() {
@@ -69,7 +81,9 @@ const mapStateToProps = state => ({
   listId: state.list.id
 })
 
-export default connect(
-  mapStateToProps,
-  { setListId }
-)(Navbar)
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { setListId }
+  )(Navbar)
+)

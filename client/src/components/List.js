@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import ListItem from './ListItem'
 import { getListItems, createEmptyListItem } from '../actions/listActions'
 
@@ -8,9 +9,14 @@ class List extends Component {
     this.props.getListItems(this.props.listId)
   }
 
-  addNewItem = () => {
-    this.props.createEmptyListItem(this.props.listId)
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location.state === 'refresh') {
+      this.props.location.state = {}
+      this.props.getListItems(this.props.listId)
+    }
   }
+
+  addNewItem = () => this.props.createEmptyListItem(this.props.listId)
 
   render() {
     return (
@@ -32,7 +38,9 @@ const mapStateToProps = state => ({
   items: state.list.items
 })
 
-export default connect(
-  mapStateToProps,
-  { getListItems, createEmptyListItem }
-)(List)
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { getListItems, createEmptyListItem }
+  )(List)
+)

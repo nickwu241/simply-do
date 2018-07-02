@@ -13,9 +13,9 @@ export default class App extends Component {
           <Redirect exact from="/" to="/list/default" />
           <Route
             path="/list/:id"
-            render={props => (
+            render={() => (
               <div>
-                <Navbar initialId={props.match.params.id} />
+                <Navbar />
                 <List />
               </div>
             )}

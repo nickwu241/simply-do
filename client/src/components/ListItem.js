@@ -27,7 +27,6 @@ class ListItem extends Component {
   }
 
   deleteItemIfEmpty = item => {
-    console.log('deleteItemIfEmpty', item)
     if (item.text === '') {
       this.deleteItem(item)
     }
