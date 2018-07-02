@@ -4,11 +4,11 @@
   "description": "Todo List Web Application with MERN stack",
   "main": "server.js",
   "scripts": {
-    "client": "npm start --prefix client",
-    "client-build": "npm build --prefix client",
-    "client-install": "npm install --prefix client",
+    "client": "yarn --cwd client start",
+    "client-build": "yarn --cwd client build",
+    "client-install": "yarn --cwd client install",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "npm install --prefix client && npm run build --prefix client",
+    "heroku-postbuild": "yarn --cwd client install && yarn --cwd client build",
     "server": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
