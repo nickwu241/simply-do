@@ -20,5 +20,6 @@ pids
 *.seed
 *.pid.lock
 
+.env
 node_modules
 build

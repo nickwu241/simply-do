@@ -5,8 +5,11 @@ const morgan = require('morgan')
 const serveStatic = require('serve-static')
 const path = require('path')
 
-const dbuser = 'nickwu'
-const dbpassword = 'simplydo241'
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+const dbuser = process.env.DB_USER
+const dbpassword = process.env.DB_PASSWORD
 const mongoURI = `mongodb://${dbuser}:${dbpassword}@ds123181.mlab.com:23181/simply-do`
 
 mongoose
