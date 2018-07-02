@@ -8,7 +8,7 @@
     "client-build": "yarn --cwd client build",
     "client-install": "yarn --cwd client install",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "yarn --cwd client install && yarn --cwd client build",
+    "heroku-postbuild": "npm install --prefix client && npm build --prefix client",
     "server": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
