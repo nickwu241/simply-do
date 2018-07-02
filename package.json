@@ -1,5 +1,5 @@
 {
-  "name": "simply-do-mern",
+  "name": "simply-do",
   "version": "0.1.0",
   "description": "Todo List Web Application with MERN stack",
   "main": "server.js",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nickwu241/simply-do-mern.git"
+    "url": "git+https://github.com/nickwu241/simply-do.git"
   },
   "author": "Nick Wu <nickwu241@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nickwu241/simply-do-mern/issues"
+    "url": "https://github.com/nickwu241/simply-do/issues"
   },
-  "homepage": "https://github.com/nickwu241/simply-do-mern#readme",
+  "homepage": "https://github.com/nickwu241/simply-do#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
