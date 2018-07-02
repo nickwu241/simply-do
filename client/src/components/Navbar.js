@@ -3,9 +3,13 @@ import { connect } from 'react-redux'
 import { setListId } from '../actions/listActions'
 
 class Navbar extends Component {
-  state = {
-    listIdDisplay: 'default',
-    listIdPending: ''
+  constructor(props) {
+    super(props)
+    this.props.setListId(props.initialId)
+    this.state = {
+      listIdDisplay: props.initialId,
+      listIdPending: props.initialId
+    }
   }
 
   listIdInputOnChange = e => this.setState({ listIdPending: e.target.value })
