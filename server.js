@@ -23,7 +23,7 @@ app.use(bodyParser.json())
 app.use('/api/list', require('./routes/api/lists'))
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(serveStatic('client/dist'))
+  app.use(serveStatic('client/build'))
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
   })
