@@ -8,9 +8,13 @@ router.get('/:id/exists', (req, res) => {
 })
 
 router.get('/:id/items', (req, res) => {
-  List.findById(req.params.id)
+  List.findById(req.params.id.toLowerCase())
     .sort({ created_at: -1 })
-    .then(list => res.json(list.items))
+    .then(list => {
+      list.last_accessed_at = Date.now()
+      list.save()
+      res.json(list.items)
+    })
     .catch(err => res.status(400).json(err))
 })
 
@@ -31,6 +35,7 @@ router.post('/:id/items', (req, res) => {
 
   List.findById(req.params.id)
     .then(list => {
+      list.last_accessed_at = Date.now()
       list.items.push(newItem)
       list.save().then(_ => res.json(newItem))
     })
@@ -47,7 +52,9 @@ router.put('/:id/items/:itemId', (req, res) => {
       if (req.body.checked !== undefined) {
         item.checked = req.body.checked
       }
-      item.updated_at = Date.now()
+      timeNow = Date.now()
+      list.last_accessed_at = timeNow
+      item.updated_at = timeNow
       list.save().then(_ => res.json(item))
     })
     .catch(err => res.status(400).json(err))
@@ -56,6 +63,7 @@ router.put('/:id/items/:itemId', (req, res) => {
 router.delete('/:id/items/:itemId', (req, res) => {
   List.findById(req.params.id)
     .then(list => {
+      list.last_accessed_at = Date.now()
       list.items.id(req.params.itemId).remove()
       list.save().then(_ => res.json({ success: true }))
     })

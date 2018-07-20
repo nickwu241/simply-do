@@ -6,6 +6,10 @@ const ListSchema = new mongoose.Schema({
   items: {
     type: [Item.schema],
     required: true
+  },
+  last_accessed_at: {
+    type: Date,
+    default: Date.now
   }
 })
 
