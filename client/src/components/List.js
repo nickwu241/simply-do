@@ -1,34 +1,44 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Button, Layout } from '@shopify/polaris'
 import ListItem from './ListItem'
 import { getListItems, createEmptyListItem } from '../actions/listActions'
 
 class List extends Component {
+  state = {
+    itemAdded: false
+  }
+
   componentWillMount() {
     this.props.getListItems(this.props.listId)
     this.lastId = this.props.listId
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.lastId !== nextProps.listId) {
-      this.lastId = nextProps.listId
-      this.props.getListItems(nextProps.listId)
+    this.renderNewList(nextProps.listId)
+  }
+
+  renderNewList = newlistId => {
+    if (this.lastId !== newlistId) {
+      this.lastId = newlistId;
+      this.setState({ itemAdded: false });
+      this.props.getListItems(newlistId);
     }
   }
 
-  addNewItem = () => this.props.createEmptyListItem(this.props.listId)
+  addNewItem = () => {
+    this.props.createEmptyListItem(this.props.listId)
+    this.setState({ itemAdded: true })
+  }
 
   render() {
     return (
-      <div>
-        <h3>Reminders</h3>
-        <div id="listWithHandle">
-          {this.props.items.map(item => (
-            <ListItem key={item._id} listId={this.props.listId} item={item} />
-          ))}
-        </div>
-        <input type="button" value="Add a reminder" onClick={this.addNewItem} />
-      </div>
+      <Layout.Section>
+        {this.props.items.map(item => (
+          <ListItem key={item._id} listId={this.props.listId} item={item} autoFocus={this.state.itemAdded} />
+        ))}
+        <Button icon="add" onClick={this.addNewItem}>Add Reminder</Button>
+      </Layout.Section>
     )
   }
 }

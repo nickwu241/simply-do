@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Checkbox, TextField, Button } from '@shopify/polaris'
 import { updateListItem, deleteListItem } from '../actions/listActions'
 
 class ListItem extends Component {
@@ -26,43 +27,33 @@ class ListItem extends Component {
     }, 1000)
   }
 
-  deleteItemIfEmpty = item => {
-    if (item.text === '') {
-      this.deleteItem(item)
+  deleteItemIfEmpty = () => {
+    if (this.state.item.text === '') {
+      this.deleteItem(this.state.item)
     }
   }
 
-  deleteItem = item => {
-    this.props.deleteListItem(this.props.listId, item._id)
+  deleteItem = () => {
+    this.props.deleteListItem(this.props.listId, this.state.item._id)
   }
 
   render() {
     return (
-      <div className="list-group-item">
-        <div className="pretty p-default p-thick p-round">
-          <input
-            type="checkbox"
-            checked={this.state.item.checked}
-            onChange={e => this.updateDebounced({ checked: e.target.checked })}
-          />
-          <div className="state p-success">
-            <label />
-          </div>
-        </div>
-        <span className="glyphicon glyphicon-move" aria-hidden="true" />
-        <input
-          type="text"
-          className="item-input"
+      <div className={this.state.item.checked ? 'strike' : ''}>
+        <TextField
           value={this.state.item.text}
-          onChange={e => this.updateDebounced({ text: e.target.value })}
-          onBlur={e => this.deleteItemIfEmpty(this.state.item)}
+          onChange={value => this.updateDebounced({ text: value })}
+          onBlur={this.deleteItemIfEmpty}
+          autoFocus={this.props.autoFocus}
+          connectedLeft={
+            <Checkbox
+              checked={this.state.item.checked}
+              onChange={value => this.updateDebounced({ checked: value })}
+            />}
+          connectedRight={
+            <Button icon="cancel" onClick={this.deleteItem} />
+          }
         />
-        <button
-          className="round-btn"
-          onClick={e => this.deleteItem(this.state.item)}
-        >
-          X
-        </button>
       </div>
     )
   }

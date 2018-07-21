@@ -1,78 +1,49 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { Button, Form, FormLayout, Layout, TextField, Heading } from '@shopify/polaris'
 import uuid from 'uuid'
 import { setListId } from '../actions/listActions'
 
 class Navbar extends Component {
   constructor(props) {
     super(props)
-    this.props.setListId(props.match.params.id)
+    const listId = props.match.params.id
+    this.props.setListId(listId)
     this.state = {
-      listIdDisplay: props.match.params.id,
-      listIdPending: props.match.params.id
+      listIdDisplay: listId === 'default' ? '' : listId,
+      listId
     }
   }
 
-  listIdInputOnChange = e => this.setState({ listIdPending: e.target.value })
-  listIdInputValue = () =>
-    this.state.listIdPending === 'default' ? '' : this.state.listIdPending
-
-  go = () => {
-    const listId = this.state.listIdPending || 'default'
+  handleSubmit = () => {
+    const listId = this.state.listIdDisplay || 'default'
     if (listId === this.listIdDisplay) {
       return
     }
-    this.setState({ listIdDisplay: listId })
+    this.setState({ listId })
     this.props.setListId(listId)
     this.props.history.replace(`/list/${listId}`, 'refresh')
   }
 
-  generateRandomId = () => this.setState({ listIdPending: uuid() })
-
-  copyToClipboard = () => {
-    const copyText = `https://simply-do.herokuapp.com${
-      this.props.history.location.pathname
-    }`
-    navigator.clipboard
-      .writeText(copyText)
-      .then(() => console.log(`copied ${copyText} to clipboard!`))
-      .catch(err => console.error('error copying to clipboard:', err))
-
-    document.getElementById('myTooltip').innerHTML = 'Copied Link to Clipboard!'
-  }
-
-  showCopiedToClipboard = () => {
-    document.getElementById('myTooltip').innerHTML = 'Copy to Clipboard'
-  }
+  generateRandomId = () => this.setState({ listIdDisplay: uuid() })
 
   render() {
     return (
-      <div>
-        <div>Current List: {this.state.listIdDisplay}</div>
-        <input
-          type="text"
-          placeholder="default"
-          onChange={this.listIdInputOnChange}
-          onKeyUp={e => e.key === 'Enter' && this.go()}
-          value={this.listIdInputValue()}
-        />
-        <button onClick={this.go}>Go</button>
-        <div>
-          <button onClick={this.generateRandomId}>Generate Random ID</button>
-        </div>
-        <div className="tooltip">
-          <button
-            onClick={this.copyToClipboard}
-            onMouseOut={this.showCopiedToClipboard}
-          >
-            <span className="tooltiptext" id="myTooltip">
-              Copy to Clipboard
-            </span>
-            Share
-          </button>
-        </div>
-      </div>
+      <Layout.Section>
+        <Heading>{'Current List ID: ' + this.state.listId}</Heading>
+        <Form onSubmit={this.handleSubmit}>
+          <FormLayout>
+            <TextField
+              placeholder="default"
+              value={this.state.listIdDisplay}
+              onChange={(value) => this.setState({ listIdDisplay: value })}
+              connectedRight={<Button submit primary>Go</Button>}
+            />
+          </FormLayout>
+          <Button slim onClick={this.generateRandomId}>Generate Random ID</Button>
+        </Form>
+      </Layout.Section>
     )
   }
 }
