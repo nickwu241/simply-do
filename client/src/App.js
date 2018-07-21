@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import { withCookies } from 'react-cookie';
+import Cookies from 'js-cookie'
 import { Layout, Page } from '@shopify/polaris'
 import Navbar from './components/Navbar'
 import List from './components/List'
 
-class App extends Component {
+export default class App extends Component {
   constructor(props) {
     super(props)
-    this.state = { listId: this.props.cookies.get('lastListId') || 'default' }
+    this.state = { listId: Cookies.get('lastListId') || 'default' }
   }
 
   render() {
@@ -30,5 +30,3 @@ class App extends Component {
     )
   }
 }
-
-export default withCookies(App)

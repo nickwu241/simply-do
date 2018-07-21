@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie'
 import {
   GET_LIST_ITEMS_REQUEST,
   GET_LIST_ITEMS_SUCCESS,
@@ -9,6 +10,7 @@ import {
 } from './types'
 
 export const setListId = listId => dispatch => {
+  Cookies.set('lastListId', listId, { expires: 7 })
   fetch(`/api/list/${listId}/exists`)
     .then(res => res.json())
     .then(data => {

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { withCookies } from 'react-cookie';
 import { Button, Form, FormLayout, Layout, TextField, Heading } from '@shopify/polaris'
 import uuid from 'uuid'
 import { setListId } from '../actions/listActions'
@@ -23,7 +22,6 @@ class Navbar extends Component {
       return
     }
     this.setState({ listId })
-    this.props.cookies.set('lastListId', listId, { path: '/', maxAge: 259200 })
     this.props.setListId(listId)
     this.props.history.replace(`/list/${listId}`, 'refresh')
   }
@@ -54,9 +52,9 @@ const mapStateToProps = state => ({
   listId: state.list.id
 })
 
-export default withCookies(withRouter(
+export default withRouter(
   connect(
     mapStateToProps,
     { setListId }
   )(Navbar)
-))
+)
