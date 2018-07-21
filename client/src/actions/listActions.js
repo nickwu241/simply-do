@@ -1,5 +1,7 @@
 import {
-  GET_LIST_ITEMS,
+  GET_LIST_ITEMS_REQUEST,
+  GET_LIST_ITEMS_SUCCESS,
+  GET_LIST_ITEMS_FAILURE,
   CREATE_LIST_ITEM,
   DELETE_LIST_ITEM,
   UPDATE_LIST_ITEM,
@@ -28,14 +30,11 @@ export const setListId = listId => dispatch => {
 }
 
 export const getListItems = listId => dispatch => {
+  dispatch({ type: GET_LIST_ITEMS_REQUEST, })
   fetch(`/api/list/${listId}/items`)
     .then(res => res.json())
-    .then(list =>
-      dispatch({
-        type: GET_LIST_ITEMS,
-        payload: list
-      })
-    )
+    .then(list => dispatch({ type: GET_LIST_ITEMS_SUCCESS, payload: list }))
+    .catch(err => dispatch({ type: GET_LIST_ITEMS_FAILURE, payload: err }))
 }
 
 export const createEmptyListItem = listId => dispatch => {

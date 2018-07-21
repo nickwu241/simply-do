@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Button, Layout } from '@shopify/polaris'
+import { Button, Layout, Spinner } from '@shopify/polaris'
 import ListItem from './ListItem'
 import { getListItems, createEmptyListItem } from '../actions/listActions'
 
 class List extends Component {
-  state = {
-    itemAdded: false
-  }
+  state = { enableAutoFocus: false }
 
   componentWillMount() {
     this.props.getListItems(this.props.listId)
@@ -21,23 +19,27 @@ class List extends Component {
   renderNewList = newlistId => {
     if (this.lastId !== newlistId) {
       this.lastId = newlistId;
-      this.setState({ itemAdded: false });
+      this.setState({ enableAutoFocus: false });
       this.props.getListItems(newlistId);
     }
   }
 
   addNewItem = () => {
     this.props.createEmptyListItem(this.props.listId)
-    this.setState({ itemAdded: true })
+    this.setState({ enableAutoFocus: true })
   }
 
   render() {
+    const { listId, items, isFetching } = this.props
+    const autoFocus = this.state.enableAutoFocus
+
     return (
       <Layout.Section>
-        {this.props.items.map(item => (
-          <ListItem key={item._id} listId={this.props.listId} item={item} autoFocus={this.state.itemAdded} />
-        ))}
-        <Button icon="add" onClick={this.addNewItem}>Add Reminder</Button>
+        {!isFetching || <Spinner size="large" color="teal" accessibilityLabel="Loading" />}
+        {isFetching || items.map(item =>
+          <ListItem key={item._id} listId={listId} item={item} autoFocus={autoFocus} />
+        )}
+        {isFetching || <Button icon="add" onClick={this.addNewItem} > Add Reminder</Button>}
       </Layout.Section>
     )
   }
@@ -45,7 +47,8 @@ class List extends Component {
 
 const mapStateToProps = state => ({
   listId: state.list.id,
-  items: state.list.items
+  items: state.list.items,
+  isFetching: state.list.isFetching
 })
 
 export default connect(
