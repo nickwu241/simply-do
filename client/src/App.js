@@ -1,32 +1,34 @@
 import React, { Component } from 'react'
-import { Provider } from 'react-redux'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import { AppProvider, Layout, Page } from '@shopify/polaris'
+import { withCookies } from 'react-cookie';
+import { Layout, Page } from '@shopify/polaris'
 import Navbar from './components/Navbar'
 import List from './components/List'
-import store from './store'
 
-export default class App extends Component {
+class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { listId: this.props.cookies.get('lastListId') || 'default' }
+  }
+
   render() {
     return (
-      <AppProvider>
-        <Provider store={store}>
-          <Switch>
-            <Redirect exact from="/" to="/list/default" />
-            <Route
-              path="/list/:id"
-              render={() => (
-                <Page singleColumn>
-                  <Layout>
-                    <Navbar />
-                    <List />
-                  </Layout>
-                </Page>
-              )}
-            />
-          </Switch>
-        </Provider>
-      </AppProvider>
+      <Switch>
+        <Redirect exact from="/" to={`/list/${this.state.listId}`} />
+        <Route
+          path="/list/:id"
+          render={() => (
+            <Page singleColumn>
+              <Layout sectioned>
+                <Navbar />
+                <List />
+              </Layout>
+            </Page>
+          )}
+        />
+      </Switch>
     )
   }
 }
+
+export default withCookies(App)
